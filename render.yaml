@@ -11,6 +11,8 @@ services:
     envVars:
       - key: NODE_ENV
         value: production
+      - key: NODE_VERSION
+        value: 20.11.0
       - key: PORT
         value: 3000
 
@@ -26,6 +28,8 @@ services:
     envVars:
       - key: NODE_ENV
         value: production
+      - key: NODE_VERSION
+        value: 20.11.0
       - key: DATABASE_URL
         fromDatabase:
           name: gigpilot-db
@@ -52,7 +56,7 @@ services:
     name: gigpilot-redis
     region: oregon
     plan: free
-    ipAllowList: [] # internal access only
+    ipAllowList: []
 
 databases:
   # ─── 4. PostgreSQL Database ──────────────────────────────
@@ -61,4 +65,3 @@ databases:
     plan: free
     databaseName: gigpilot_ai
     user: gigpilot
-
