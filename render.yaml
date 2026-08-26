@@ -46,7 +46,7 @@ services:
         fromService:
           type: web
           name: gigpilot-backend
-          property: url
+          property: host
 
   # ─── 3. Redis Queue / Cache Service ─────────────────────
   - type: redis
