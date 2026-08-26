@@ -1,11 +1,26 @@
 services:
-  # ─── 1. NestJS Backend API ──────────────────────────────
+  # ─── 1. Next.js Frontend Dashboard ───────────────────────
+  - type: web
+    name: gigpilot-frontend
+    env: node
+    region: oregon
+    plan: free
+    rootDir: frontend
+    buildCommand: npm install && npm run build
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 3000
+
+  # ─── 2. NestJS Backend API ──────────────────────────────
   - type: web
     name: gigpilot-backend
     env: node
     region: oregon
     plan: free
-    rootDir: gigpilot-ai/backend
+    rootDir: backend
     buildCommand: npm install --include=dev && npx prisma generate && npm run build
     startCommand: npx prisma db push && node dist/main.js
     envVars:
@@ -32,22 +47,6 @@ services:
       - key: PORT
         value: 3001
 
-  # ─── 2. Next.js Web Dashboard Frontend ───────────────────
-  - type: web
-    name: gigpilot-frontend
-    env: node
-    region: oregon
-    plan: free
-    rootDir: gigpilot-ai/frontend
-    buildCommand: npm install --include=dev && npm run build
-    startCommand: npm run start
-    envVars:
-      - key: NEXT_PUBLIC_API_URL
-        fromService:
-          type: web
-          name: gigpilot-backend
-          property: host
-
   # ─── 3. Redis Queue / Cache Service ─────────────────────
   - type: redis
     name: gigpilot-redis
@@ -62,3 +61,4 @@ databases:
     plan: free
     databaseName: gigpilot_ai
     user: gigpilot
+
