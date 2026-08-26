@@ -5,7 +5,7 @@ services:
     env: node
     region: oregon
     plan: free
-    rootDir: backend
+    rootDir: gigpilot-ai/backend
     buildCommand: npm install --include=dev && npx prisma generate && npm run build
     startCommand: npx prisma db push && node dist/main.js
     envVars:
@@ -38,7 +38,7 @@ services:
     env: node
     region: oregon
     plan: free
-    rootDir: frontend
+    rootDir: gigpilot-ai/frontend
     buildCommand: npm install --include=dev && npm run build
     startCommand: npm run start
     envVars:
