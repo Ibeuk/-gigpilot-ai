@@ -7,10 +7,9 @@ COPY package*.json ./
 RUN npm ci
 
 COPY . .
-RUN npx prisma generate
 
-EXPOSE 3001
-CMD ["npm", "run", "start:dev"]
+EXPOSE 3000
+CMD ["npm", "run", "dev"]
 
 # ─── Stage 2: Build ─────────────────────────────────
 FROM node:20-alpine AS build
@@ -21,7 +20,14 @@ COPY package*.json ./
 RUN npm ci
 
 COPY . .
-RUN npx prisma generate
+
+ARG NEXT_PUBLIC_API_URL
+ARG NEXT_PUBLIC_WS_URL
+
+ENV NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL
+ENV NEXT_PUBLIC_WS_URL=$NEXT_PUBLIC_WS_URL
+ENV NEXT_TELEMETRY_DISABLED=1
+
 RUN npm run build
 
 # ─── Stage 3: Production ────────────────────────────
@@ -31,23 +37,22 @@ RUN apk add --no-cache dumb-init
 
 WORKDIR /app
 
-# Create non-root user
 RUN addgroup -g 1001 -S nodejs && \
-    adduser -S nestjs -u 1001 -G nodejs
+    adduser -S nextjs -u 1001 -G nodejs
 
-COPY package*.json ./
-RUN npm ci --only=production && npm cache clean --force
+COPY --from=build /app/public ./public
+COPY --from=build /app/.next/standalone ./
+COPY --from=build /app/.next/static ./.next/static
 
-COPY --from=build /app/dist ./dist
-COPY --from=build /app/node_modules/.prisma ./node_modules/.prisma
-COPY prisma ./prisma
+RUN chown -R nextjs:nodejs /app
 
-RUN chown -R nestjs:nodejs /app
+USER nextjs
 
-USER nestjs
+EXPOSE 3000
 
-EXPOSE 3001
+ENV PORT=3000
+ENV HOSTNAME="0.0.0.0"
+ENV NEXT_TELEMETRY_DISABLED=1
 
-# dumb-init handles PID 1 properly for signal forwarding
 ENTRYPOINT ["dumb-init", "--"]
-CMD ["node", "dist/main.js"]
+CMD ["node", "server.js"]
