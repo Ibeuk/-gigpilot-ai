@@ -1,0 +1,108 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-[#06080e] text-gray-100 font-sans antialiased min-h-screen selection:bg-indigo-500 selection:text-white overflow-x-hidden;
+    font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    letter-spacing: -0.02em;
+  }
+
+  code, kbd, samp, pre {
+    font-family: 'JetBrains Mono', monospace;
+  }
+}
+
+/* Ambient Radial Glow Lighting */
+.bg-ambient-glow {
+  background-image: 
+    radial-gradient(circle at 10% 10%, rgba(99, 102, 241, 0.18) 0%, transparent 40%),
+    radial-gradient(circle at 90% 20%, rgba(168, 85, 247, 0.14) 0%, transparent 45%),
+    radial-gradient(circle at 50% 80%, rgba(16, 185, 129, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 75% 60%, rgba(236, 72, 153, 0.08) 0%, transparent 40%);
+}
+
+/* Glassmorphism Panel Tokens */
+.glass-panel {
+  background: rgba(12, 17, 29, 0.85);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.45);
+}
+
+.glass-card {
+  background: rgba(15, 23, 42, 0.75);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.glass-card:hover {
+  background: rgba(30, 41, 59, 0.9);
+  border-color: rgba(99, 102, 241, 0.45);
+  transform: translateY(-3px);
+  box-shadow: 0 16px 36px -8px rgba(99, 102, 241, 0.25);
+}
+
+/* Vibrant Text Gradients */
+.gradient-text {
+  @apply bg-clip-text text-transparent bg-gradient-to-r from-indigo-400 via-purple-300 to-pink-400;
+}
+
+.gradient-text-emerald {
+  @apply bg-clip-text text-transparent bg-gradient-to-r from-emerald-400 via-teal-300 to-cyan-400;
+}
+
+/* Animated Neon Border */
+.gradient-border {
+  position: relative;
+}
+
+.gradient-border::before {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  padding: 1.5px;
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.7), rgba(168, 85, 247, 0.6), rgba(236, 72, 153, 0.4));
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+/* Radar & Pulse Animations */
+@keyframes radar-pulse {
+  0% { transform: scale(0.95); opacity: 0.9; }
+  50% { transform: scale(1.12); opacity: 0.5; }
+  100% { transform: scale(0.95); opacity: 0.9; }
+}
+
+.animate-radar {
+  animation: radar-pulse 2s infinite ease-in-out;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #06080e;
+}
+::-webkit-scrollbar-thumb {
+  background: #1e293b;
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #334155;
+}
