@@ -6,7 +6,7 @@ services:
     region: oregon
     plan: free
     rootDir: frontend
-    buildCommand: npm install && npm run build
+    buildCommand: npm install --include=dev && npm run build
     startCommand: npm start
     envVars:
       - key: NODE_ENV
@@ -15,6 +15,11 @@ services:
         value: 20.11.0
       - key: PORT
         value: 3000
+      - key: NEXT_PUBLIC_API_URL
+        fromService:
+          type: web
+          name: gigpilot-backend
+          property: url
 
   # ─── 2. NestJS Backend API ──────────────────────────────
   - type: web
@@ -24,7 +29,7 @@ services:
     plan: free
     rootDir: backend
     buildCommand: npm install --include=dev && npx prisma generate && npm run build
-    startCommand: npx prisma db push && node dist/main.js
+    startCommand: npx prisma db push --accept-data-loss && node dist/main.js
     envVars:
       - key: NODE_ENV
         value: production
@@ -36,12 +41,12 @@ services:
           property: connectionString
       - key: REDIS_HOST
         fromService:
-          type: redis
+          type: keyvalue
           name: gigpilot-redis
           property: host
       - key: REDIS_PORT
         fromService:
-          type: redis
+          type: keyvalue
           name: gigpilot-redis
           property: port
       - key: JWT_SECRET
@@ -52,11 +57,11 @@ services:
         value: 3001
 
   # ─── 3. Redis Queue / Cache Service ─────────────────────
-  - type: redis
+  - type: keyvalue
     name: gigpilot-redis
     region: oregon
     plan: free
-    ipAllowList: []
+    ipAllowList: [] # internal access only
 
 databases:
   # ─── 4. PostgreSQL Database ──────────────────────────────
@@ -65,3 +70,6 @@ databases:
     plan: free
     databaseName: gigpilot_ai
     user: gigpilot
+
+
+
