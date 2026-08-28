@@ -1,0 +1,473 @@
+// GigPilot AI — Production Database Schema
+// PostgreSQL via Prisma ORM
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ─────────────────────────────────────────────
+// ENUMS
+// ─────────────────────────────────────────────
+
+enum UserRole {
+  ADMIN
+  USER
+}
+
+enum GigStatus {
+  DRAFT
+  ACTIVE
+  PAUSED
+  ARCHIVED
+}
+
+enum CampaignType {
+  SOCIAL_MEDIA
+  CONTENT_MARKETING
+  SEO
+  PAID_ADS
+  EMAIL
+  MULTI_CHANNEL
+}
+
+enum CampaignStatus {
+  DRAFT
+  SCHEDULED
+  ACTIVE
+  PAUSED
+  COMPLETED
+  FAILED
+}
+
+enum TaskType {
+  RESEARCH
+  CONTENT_GENERATION
+  CAMPAIGN_SETUP
+  CAMPAIGN_MONITOR
+  ANALYTICS
+  OPTIMIZATION
+  INTEGRATION_SYNC
+  NOTIFICATION
+}
+
+enum TaskStatus {
+  PENDING
+  QUEUED
+  RUNNING
+  COMPLETED
+  FAILED
+  CANCELLED
+  RETRYING
+}
+
+enum TaskPriority {
+  LOW
+  MEDIUM
+  HIGH
+  CRITICAL
+}
+
+enum AgentType {
+  MASTER
+  RESEARCH
+  CONTENT
+  CAMPAIGN
+  ANALYTICS
+  OPTIMIZATION
+}
+
+enum AgentStatus {
+  IDLE
+  BUSY
+  ERROR
+  OFFLINE
+}
+
+enum ContentType {
+  SOCIAL_POST
+  BLOG_ARTICLE
+  AD_COPY
+  EMAIL_TEMPLATE
+  LANDING_PAGE
+  VIDEO_SCRIPT
+  GIG_DESCRIPTION
+  SEO_CONTENT
+}
+
+enum ContentStatus {
+  DRAFT
+  GENERATED
+  APPROVED
+  PUBLISHED
+  REJECTED
+}
+
+enum IntegrationPlatform {
+  GOOGLE_ADS
+  META_MARKETING
+  GOOGLE_ANALYTICS
+  TWITTER
+  LINKEDIN
+  INSTAGRAM
+  FACEBOOK
+  SENDGRID
+  RESEND
+}
+
+enum IntegrationStatus {
+  CONNECTED
+  DISCONNECTED
+  ERROR
+  EXPIRED
+}
+
+enum NotificationType {
+  TASK_COMPLETED
+  TASK_FAILED
+  CAMPAIGN_STARTED
+  CAMPAIGN_COMPLETED
+  AGENT_ERROR
+  SYSTEM_ALERT
+  OPTIMIZATION_SUGGESTION
+  INTEGRATION_ISSUE
+}
+
+enum LogLevel {
+  DEBUG
+  INFO
+  WARN
+  ERROR
+  FATAL
+}
+
+// ─────────────────────────────────────────────
+// MODELS
+// ─────────────────────────────────────────────
+
+model User {
+  id            String   @id @default(uuid())
+  email         String   @unique
+  passwordHash  String
+  name          String
+  role          UserRole @default(USER)
+  avatar        String?
+  preferences   Json     @default("{}")
+  isActive      Boolean  @default(true)
+  lastLoginAt   DateTime?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  // Relations
+  projects      Project[]
+  apiKeys       ApiKey[]
+  notifications Notification[]
+  integrations  Integration[]
+
+  @@index([email])
+  @@index([role])
+  @@map("users")
+}
+
+model Project {
+  id          String   @id @default(uuid())
+  userId      String
+  name        String
+  description String?
+  niche       String?
+  targetAudience Json?
+  config      Json     @default("{}")
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relations
+  user        User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  gigs        Gig[]
+  campaigns   Campaign[]
+
+  @@index([userId])
+  @@index([niche])
+  @@map("projects")
+}
+
+model Gig {
+  id          String    @id @default(uuid())
+  projectId   String
+  title       String
+  description String?   @db.Text
+  category    String?
+  subcategory String?
+  keywords    Json      @default("[]")
+  fiverrUrl   String?
+  pricing     Json?
+  status      GigStatus @default(DRAFT)
+  metadata    Json      @default("{}")
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  // Relations
+  project     Project    @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  campaigns   Campaign[]
+
+  @@index([projectId])
+  @@index([status])
+  @@index([category])
+  @@map("gigs")
+}
+
+model Campaign {
+  id          String         @id @default(uuid())
+  projectId   String
+  gigId       String?
+  name        String
+  type        CampaignType
+  status      CampaignStatus @default(DRAFT)
+  strategy    Json           @default("{}")
+  budget      Json?
+  targeting   Json?
+  schedule    Json?
+  startDate   DateTime?
+  endDate     DateTime?
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+
+  // Relations
+  project     Project              @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  gig         Gig?                 @relation(fields: [gigId], references: [id], onDelete: SetNull)
+  tasks       Task[]
+  content     Content[]
+  snapshots   AnalyticsSnapshot[]
+
+  @@index([projectId])
+  @@index([gigId])
+  @@index([status])
+  @@index([type])
+  @@index([startDate, endDate])
+  @@map("campaigns")
+}
+
+model Task {
+  id            String       @id @default(uuid())
+  campaignId    String?
+  agentId       String?
+  parentTaskId  String?
+  type          TaskType
+  status        TaskStatus   @default(PENDING)
+  priority      TaskPriority @default(MEDIUM)
+  title         String
+  description   String?
+  payload       Json         @default("{}")
+  result        Json?
+  errorMessage  String?
+  retryCount    Int          @default(0)
+  maxRetries    Int          @default(3)
+  scheduledAt   DateTime?
+  startedAt     DateTime?
+  completedAt   DateTime?
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
+
+  // Relations
+  campaign      Campaign?   @relation(fields: [campaignId], references: [id], onDelete: SetNull)
+  agent         Agent?      @relation(fields: [agentId], references: [id], onDelete: SetNull)
+  parentTask    Task?       @relation("TaskHierarchy", fields: [parentTaskId], references: [id])
+  subtasks      Task[]      @relation("TaskHierarchy")
+
+  @@index([campaignId])
+  @@index([agentId])
+  @@index([status])
+  @@index([type])
+  @@index([priority])
+  @@index([scheduledAt])
+  @@index([parentTaskId])
+  @@map("tasks")
+}
+
+model Agent {
+  id            String      @id @default(uuid())
+  type          AgentType   @unique
+  name          String
+  description   String?
+  status        AgentStatus @default(IDLE)
+  config        Json        @default("{}")
+  systemPrompt  String?     @db.Text
+  lastActiveAt  DateTime?
+  totalTasks    Int         @default(0)
+  successRate   Float       @default(0)
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+
+  // Relations
+  tasks         Task[]
+  memories      AgentMemory[]
+  logs          AgentLog[]
+
+  @@index([type])
+  @@index([status])
+  @@map("agents")
+}
+
+model AgentMemory {
+  id          String    @id @default(uuid())
+  agentId     String
+  namespace   String    @default("default")
+  key         String
+  value       Json
+  expiresAt   DateTime?
+  accessCount Int       @default(0)
+  lastAccessedAt DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  // Relations
+  agent       Agent     @relation(fields: [agentId], references: [id], onDelete: Cascade)
+
+  @@unique([agentId, namespace, key])
+  @@index([agentId, namespace])
+  @@index([expiresAt])
+  @@map("agent_memories")
+}
+
+model AgentLog {
+  id        String   @id @default(uuid())
+  agentId   String
+  taskId    String?
+  level     LogLevel @default(INFO)
+  message   String
+  data      Json?
+  createdAt DateTime @default(now())
+
+  // Relations
+  agent     Agent    @relation(fields: [agentId], references: [id], onDelete: Cascade)
+
+  @@index([agentId])
+  @@index([level])
+  @@index([createdAt])
+  @@index([taskId])
+  @@map("agent_logs")
+}
+
+model Content {
+  id          String        @id @default(uuid())
+  campaignId  String?
+  type        ContentType
+  title       String
+  body        String        @db.Text
+  metadata    Json          @default("{}")
+  status      ContentStatus @default(DRAFT)
+  platform    String?
+  publishedAt DateTime?
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+
+  // Relations
+  campaign    Campaign?     @relation(fields: [campaignId], references: [id], onDelete: SetNull)
+
+  @@index([campaignId])
+  @@index([type])
+  @@index([status])
+  @@index([platform])
+  @@map("content")
+}
+
+model AnalyticsSnapshot {
+  id          String   @id @default(uuid())
+  campaignId  String
+  metrics     Json
+  insights    Json?
+  period      String?
+  capturedAt  DateTime @default(now())
+
+  // Relations
+  campaign    Campaign @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+
+  @@index([campaignId])
+  @@index([capturedAt])
+  @@map("analytics_snapshots")
+}
+
+model Integration {
+  id          String              @id @default(uuid())
+  userId      String
+  platform    IntegrationPlatform
+  status      IntegrationStatus   @default(DISCONNECTED)
+  config      Json                @default("{}")
+  lastSyncAt  DateTime?
+  errorMessage String?
+  createdAt   DateTime            @default(now())
+  updatedAt   DateTime            @updatedAt
+
+  // Relations
+  user        User                @relation(fields: [userId], references: [id], onDelete: Cascade)
+  oauthTokens OAuthToken[]
+
+  @@unique([userId, platform])
+  @@index([userId])
+  @@index([platform])
+  @@index([status])
+  @@map("integrations")
+}
+
+model OAuthToken {
+  id             String   @id @default(uuid())
+  integrationId  String
+  accessToken    String   @db.Text
+  refreshToken   String?  @db.Text
+  tokenType      String   @default("Bearer")
+  scope          String?
+  expiresAt      DateTime?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  // Relations
+  integration    Integration @relation(fields: [integrationId], references: [id], onDelete: Cascade)
+
+  @@index([integrationId])
+  @@index([expiresAt])
+  @@map("oauth_tokens")
+}
+
+model ApiKey {
+  id          String   @id @default(uuid())
+  userId      String
+  name        String
+  keyHash     String   @unique
+  keyPrefix   String
+  lastUsedAt  DateTime?
+  expiresAt   DateTime?
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+
+  // Relations
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([keyHash])
+  @@index([isActive])
+  @@map("api_keys")
+}
+
+model Notification {
+  id        String           @id @default(uuid())
+  userId    String
+  type      NotificationType
+  title     String
+  message   String
+  data      Json?
+  isRead    Boolean          @default(false)
+  readAt    DateTime?
+  createdAt DateTime         @default(now())
+
+  // Relations
+  user      User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, isRead])
+  @@index([type])
+  @@index([createdAt])
+  @@map("notifications")
+}
