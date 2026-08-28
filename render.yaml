@@ -16,10 +16,7 @@ services:
       - key: PORT
         value: 3000
       - key: NEXT_PUBLIC_API_URL
-        fromService:
-          type: web
-          name: gigpilot-backend
-          property: url
+        value: https://gigpilot-backend.onrender.com
 
   # ─── 2. NestJS Backend API ──────────────────────────────
   - type: web
@@ -70,6 +67,3 @@ databases:
     plan: free
     databaseName: gigpilot_ai
     user: gigpilot
-
-
-
