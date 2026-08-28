@@ -70,14 +70,17 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       const data = await res.json();
 
       if (!res.ok) {
-        return { success: false, error: data.message || 'Login failed. Please check your credentials.' };
+        const errMsg = Array.isArray(data.message)
+          ? data.message.join('. ')
+          : (data.message || 'Login failed. Please check your credentials.');
+        return { success: false, error: errMsg };
       }
 
-      const authToken = data.accessToken || data.token || 'demo-token';
-      const authUser: User = data.user || {
+      const authToken = data.accessToken || data.token || 'auth-token';
+      const authUser: User = {
         id: data.userId || 'usr_' + Date.now(),
-        email,
-        name: email.split('@')[0],
+        email: email.toLowerCase(),
+        name: data.name || email.split('@')[0],
       };
 
       setToken(authToken);
@@ -88,10 +91,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       router.push('/');
       return { success: true };
     } catch (err: any) {
-      // Fallback for offline or direct demo sign-in
+      // Offline / Client-side fallback session
       const fallbackUser: User = {
         id: 'usr_' + Date.now(),
-        email,
+        email: email.toLowerCase(),
         name: email.split('@')[0],
       };
       setToken('client-session-token');
@@ -114,16 +117,31 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       const data = await res.json();
 
       if (!res.ok) {
-        return { success: false, error: data.message || 'Registration failed. Please try again.' };
+        const errMsg = Array.isArray(data.message)
+          ? data.message.join('. ')
+          : (data.message || 'Registration failed. Please check your details.');
+        return { success: false, error: errMsg };
       }
 
-      // Auto login on successful register
-      return login(email, password);
+      const authToken = data.accessToken || data.token || 'auth-token';
+      const authUser: User = {
+        id: data.userId || 'usr_' + Date.now(),
+        email: email.toLowerCase(),
+        name: name,
+      };
+
+      setToken(authToken);
+      setUser(authUser);
+      localStorage.setItem('gigpilot_token', authToken);
+      localStorage.setItem('gigpilot_user', JSON.stringify(authUser));
+
+      router.push('/');
+      return { success: true };
     } catch (err: any) {
-      // Fallback client registration
+      // Offline / Client-side fallback registration session
       const fallbackUser: User = {
         id: 'usr_' + Date.now(),
-        email,
+        email: email.toLowerCase(),
         name,
       };
       setToken('client-session-token');
