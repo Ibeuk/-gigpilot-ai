@@ -26,6 +26,12 @@ export class PingController {
     return { targets: this.pingService.getTargets() };
   }
 
+  @Get('gigs')
+  @ApiOperation({ summary: 'Get all preloaded and active Fiverr gig URLs' })
+  getGigs() {
+    return { gigs: this.continuousPinger.getGigs() };
+  }
+
   @Get('continuous-status')
   @ApiOperation({ summary: 'Get 24/7 infinite promotion loop status & live metrics' })
   getContinuousStatus() {

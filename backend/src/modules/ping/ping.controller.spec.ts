@@ -24,6 +24,7 @@ describe('PingController', () => {
           provide: ContinuousPingerService,
           useValue: {
             getContinuousStatus: jest.fn().mockReturnValue({ isRunning: true, gigs: [] }),
+            getGigs: jest.fn().mockReturnValue([{ id: 'gig-1', url: 'https://www.fiverr.com/s/YR3VYqp' }]),
             addGigUrl: jest.fn().mockReturnValue({ id: 'gig-new', url: 'http://test.url' }),
           },
         },
@@ -43,6 +44,12 @@ describe('PingController', () => {
     const res = controller.getTargets();
     expect(res.targets).toHaveLength(1);
     expect(pingService.getTargets).toHaveBeenCalled();
+  });
+
+  it('should return gigs', () => {
+    const res = controller.getGigs();
+    expect(res.gigs).toHaveLength(1);
+    expect(continuousPinger.getGigs).toHaveBeenCalled();
   });
 
   it('should return continuous status', () => {

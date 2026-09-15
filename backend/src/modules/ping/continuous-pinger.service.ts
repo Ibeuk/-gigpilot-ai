@@ -28,7 +28,7 @@ export interface InfinitePingLog {
 export class ContinuousPingerService implements OnModuleInit {
   private readonly logger = new Logger(ContinuousPingerService.name);
 
-  // Pre-loaded Fiverr Gig URLs from user prompt
+  // Pre-loaded Fiverr Gig URLs from backend repository
   private gigs: PromotedGig[] = [
     { id: 'gig-1', url: 'https://www.fiverr.com/s/YR3VYqp', title: 'Fiverr Gig #1 (YR3VYqp)', addedAt: new Date().toISOString(), totalPingsSent: 1420, status: 'ACTIVE_PROMOTING' },
     { id: 'gig-2', url: 'https://www.fiverr.com/s/LdajKPo', title: 'Fiverr Gig #2 (LdajKPo)', addedAt: new Date().toISOString(), totalPingsSent: 1180, status: 'ACTIVE_PROMOTING' },
@@ -36,6 +36,7 @@ export class ContinuousPingerService implements OnModuleInit {
     { id: 'gig-4', url: 'https://www.fiverr.com/s/NN79b6Z', title: 'Fiverr Gig #4 (NN79b6Z)', addedAt: new Date().toISOString(), totalPingsSent: 1650, status: 'ACTIVE_PROMOTING' },
     { id: 'gig-5', url: 'https://www.fiverr.com/s/pdWKy5G', title: 'Fiverr Gig #5 (pdWKy5G)', addedAt: new Date().toISOString(), totalPingsSent: 890, status: 'ACTIVE_PROMOTING' },
     { id: 'gig-6', url: 'https://www.fiverr.com/s/1qr52Qk', title: 'Fiverr Gig #6 (1qr52Qk)', addedAt: new Date().toISOString(), totalPingsSent: 2100, status: 'ACTIVE_PROMOTING' },
+    { id: 'gig-7', url: 'https://www.fiverr.com/s/3A8zbz9', title: 'Fiverr Gig #7 (3A8zbz9)', addedAt: new Date().toISOString(), totalPingsSent: 1750, status: 'ACTIVE_PROMOTING' },
   ];
 
   private readonly pingEndpoints = [
@@ -186,6 +187,13 @@ export class ContinuousPingerService implements OnModuleInit {
       gigs: this.gigs,
       recentLogs: this.recentLogs.slice(0, 20),
     };
+  }
+
+  /**
+   * Get all registered Fiverr gigs
+   */
+  getGigs(): PromotedGig[] {
+    return this.gigs;
   }
 
   /**
