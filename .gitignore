@@ -55,3 +55,18 @@ backend/prisma/migrations/**/migration_lock.toml
 # Misc
 *.tgz
 .cache/
+gigpilot-ai/
+gigpilot-ai-clean/
+*.zip
+*.tar.gz
+prepare-*.bat
+AI AGENT SYSTEM.md
+AUTOMATION ENGINE.md
+BACKEND DEVELOPMENT AGENT.md
+DATABASE ENGINEER AGENT.md
+FINAL PRODUCTION REVIEW.md
+FRONTEND DASHBOARD.md
+INTEGRATION AGENT.md
+SYSTEM ARCHITECTURE AGENT.md
+TESTING AGENT.md
+VPS DEPLOYMENT AGENT.md

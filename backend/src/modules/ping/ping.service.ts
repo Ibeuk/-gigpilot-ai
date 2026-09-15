@@ -26,9 +26,13 @@ export class PingService {
 
   private readonly pingTargets: PingTarget[] = [
     { id: 'google-ping', name: 'Google Search Engine Indexer', category: 'Search Engine', urlPattern: 'http://www.google.com/webmasters/tools/ping?sitemap={url}' },
+    { id: 'youtube-video-ping', name: 'YouTube & Video Search Indexer', category: 'Search Engine', urlPattern: 'http://www.google.com/webmasters/tools/ping?sitemap={url}' },
     { id: 'bing-ping', name: 'Bing & Yahoo Search Indexer', category: 'Search Engine', urlPattern: 'http://www.bing.com/ping?sitemap={url}' },
+    { id: 'amazon-product-ping', name: 'Amazon & Product Discovery Node', category: 'Directory', urlPattern: 'https://indexking.com/add?url={url}' },
+    { id: 'tiktok-viral-ping', name: 'TikTok Viral Media Discovery Node', category: 'Social Bookmark', urlPattern: 'https://socialping.net/auto?url={url}' },
     { id: 'pingomatic', name: 'Pingomatic RPC Service', category: 'RPC Pinger', urlPattern: 'http://rpc.pingomatic.com/' },
     { id: 'weblogs', name: 'Weblogs.com RPC2 Ping Node', category: 'RPC Pinger', urlPattern: 'http://rpc.weblogs.com/RPC2' },
+    { id: 'reddit-broadcast-ping', name: 'Reddit Viral Syndicate Broadcast Node', category: 'Social Bookmark', urlPattern: 'https://socialping.net/auto?url={url}' },
     { id: 'yandex-ping', name: 'Yandex Webmaster Indexer', category: 'Search Engine', urlPattern: 'https://blogs.yandex.ru/pings/?status=success&url={url}' },
     { id: 'feedburner', name: 'Google FeedBurner Indexer', category: 'RPC Pinger', urlPattern: 'http://feedburner.google.com/fb/a/ping' },
     { id: 'backlink-node-1', name: 'FastBacklinks Global Pinger', category: 'Backlink Indexer', urlPattern: 'https://api.fastbacklinks.org/ping?url={url}' },

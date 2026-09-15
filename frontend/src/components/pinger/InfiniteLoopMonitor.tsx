@@ -27,12 +27,11 @@ interface GigItem {
 }
 
 const INITIAL_GIGS: GigItem[] = [
-  { id: 'gig-1', url: 'https://www.fiverr.com/s/YR3VYqp', title: 'Fiverr Gig #1 (YR3VYqp)', pings: 1420 },
-  { id: 'gig-2', url: 'https://www.fiverr.com/s/LdajKPo', title: 'Fiverr Gig #2 (LdajKPo)', pings: 1180 },
-  { id: 'gig-3', url: 'https://www.fiverr.com/s/VYjybBV', title: 'Fiverr Gig #3 (VYjybBV)', pings: 950 },
-  { id: 'gig-4', url: 'https://www.fiverr.com/s/NN79b6Z', title: 'Fiverr Gig #4 (NN79b6Z)', pings: 1650 },
-  { id: 'gig-5', url: 'https://www.fiverr.com/s/pdWKy5G', title: 'Fiverr Gig #5 (pdWKy5G)', pings: 890 },
-  { id: 'gig-6', url: 'https://www.fiverr.com/s/1qr52Qk', title: 'Fiverr Gig #6 (1qr52Qk)', pings: 2100 },
+  { id: 'gig-1', url: 'https://www.fiverr.com/s/qbDRRxV', title: 'Fiverr Gig #1 (qbDRRxV)', pings: 0 },
+  { id: 'gig-2', url: 'https://www.fiverr.com/s/WeEVVkL', title: 'Fiverr Gig #2 (WeEVVkL)', pings: 0 },
+  { id: 'gig-3', url: 'https://www.fiverr.com/s/RV7bbEw', title: 'Fiverr Gig #3 (RV7bbEw)', pings: 0 },
+  { id: 'gig-4', url: 'https://www.fiverr.com/s/zAWooXK', title: 'Fiverr Gig #4 (zAWooXK)', pings: 0 },
+  { id: 'gig-5', url: 'https://www.fiverr.com/s/lrjYYmQ', title: 'Fiverr Gig #5 (lrjYYmQ)', pings: 0 },
 ];
 
 export default function InfiniteLoopMonitor() {
@@ -50,9 +49,13 @@ export default function InfiniteLoopMonitor() {
 
   const TARGET_ENDPOINTS = [
     { name: 'Google Search Engine Indexer', category: 'Search Engine' },
+    { name: 'YouTube & Video Search Indexer', category: 'Search Engine' },
     { name: 'Bing & Yahoo RPC Indexer', category: 'Search Engine' },
+    { name: 'Amazon & Product Discovery Node', category: 'Directory' },
+    { name: 'TikTok Viral Media Discovery Node', category: 'Social Bookmark' },
     { name: 'Pingomatic RPC Service', category: 'RPC Pinger' },
     { name: 'Weblogs.com RPC2 Ping Node', category: 'RPC Pinger' },
+    { name: 'Reddit Viral Syndicate Broadcast Node', category: 'Social Bookmark' },
     { name: 'PingMyUrls Directory Indexer', category: 'Directory' },
     { name: 'Yandex Webmaster Pinger', category: 'Search Engine' },
     { name: 'FastBacklinks Global Node', category: 'Backlink Indexer' },

@@ -59,9 +59,9 @@ describe('PingController', () => {
   });
 
   it('should add gig url', () => {
-    const res = controller.addGig({ gigUrl: 'https://www.fiverr.com/s/YR3VYqp', title: 'Test Gig' });
+    const res = controller.addGig({ gigUrl: 'https://www.fiverr.com/s/qbDRRxV', title: 'Test Gig' });
     expect(res.id).toBe('gig-new');
-    expect(continuousPinger.addGigUrl).toHaveBeenCalledWith('https://www.fiverr.com/s/YR3VYqp', 'Test Gig');
+    expect(continuousPinger.addGigUrl).toHaveBeenCalledWith('https://www.fiverr.com/s/qbDRRxV', 'Test Gig');
   });
 
   it('should throw BadRequestException on invalid gig url for addGig', () => {
@@ -69,9 +69,9 @@ describe('PingController', () => {
   });
 
   it('should auto-start pinging', async () => {
-    const res = await controller.autoStartPing({ gigUrl: 'https://www.fiverr.com/s/YR3VYqp' });
+    const res = await controller.autoStartPing({ gigUrl: 'https://www.fiverr.com/s/qbDRRxV' });
     expect(res.jobStarted).toBe(true);
-    expect(pingService.executeAutoPing).toHaveBeenCalledWith('https://www.fiverr.com/s/YR3VYqp');
+    expect(pingService.executeAutoPing).toHaveBeenCalledWith('https://www.fiverr.com/s/qbDRRxV');
   });
 
   it('should throw BadRequestException on invalid gig url for autoStartPing', async () => {

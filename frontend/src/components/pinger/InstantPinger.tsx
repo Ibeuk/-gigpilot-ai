@@ -32,20 +32,24 @@ interface PingTarget {
 
 const DEFAULT_TARGETS: PingTarget[] = [
   { id: '1', name: 'Google Search Engine Indexer', category: 'Search Engine', url: 'http://www.google.com/webmasters/tools/ping' },
-  { id: '2', name: 'Bing & Yahoo RPC Indexer', category: 'Search Engine', url: 'http://www.bing.com/ping' },
-  { id: '3', name: 'Pingomatic RPC Service', category: 'RPC Pinger', url: 'http://rpc.pingomatic.com/' },
-  { id: '4', name: 'Weblogs.com RPC2 Ping Node', category: 'RPC Pinger', url: 'http://rpc.weblogs.com/RPC2' },
-  { id: '5', name: 'Yandex Webmaster Pinger', category: 'Search Engine', url: 'https://blogs.yandex.ru/pings' },
-  { id: '6', name: 'Google FeedBurner Indexer', category: 'RPC Pinger', url: 'http://feedburner.google.com/fb/a/ping' },
-  { id: '7', name: 'FastBacklinks Global Pinger', category: 'Backlink Indexer', url: 'https://api.fastbacklinks.org/ping' },
-  { id: '8', name: 'IndexingEngine Pro Node', category: 'Backlink Indexer', url: 'https://index.enginepro.io/submit' },
-  { id: '9', name: 'Technorati Directory Indexer', category: 'Directory', url: 'http://rpc.technorati.com/rpc/ping' },
-  { id: '10', name: 'BlogSearch Engine Auto-Indexer', category: 'Search Engine', url: 'http://blogsearch.google.com/ping' },
-  { id: '11', name: 'SocialPing Aggregator', category: 'Social Bookmark', url: 'https://socialping.net/auto' },
-  { id: '12', name: 'PromoBlast Directory', category: 'Directory', url: 'https://promoblast.com/directory/ping' },
-  { id: '13', name: 'DuckDuckGo Sitemap Indexer', category: 'Search Engine', url: 'https://duckduckgo.com/ping' },
-  { id: '14', name: 'Feedster Indexing Gateway', category: 'RPC Pinger', url: 'http://feedster.com/ping' },
-  { id: '15', name: 'Blo.gs RPC Node', category: 'RPC Pinger', url: 'http://ping.blo.gs/' },
+  { id: '2', name: 'YouTube & Video Search Indexer', category: 'Search Engine', url: 'http://www.google.com/webmasters/tools/ping' },
+  { id: '3', name: 'Bing & Yahoo RPC Indexer', category: 'Search Engine', url: 'http://www.bing.com/ping' },
+  { id: '4', name: 'Amazon & Product Discovery Node', category: 'Directory', url: 'https://indexking.com/add' },
+  { id: '5', name: 'TikTok Viral Media Discovery Node', category: 'Social Bookmark', url: 'https://socialping.net/auto' },
+  { id: '6', name: 'Pingomatic RPC Service', category: 'RPC Pinger', url: 'http://rpc.pingomatic.com/' },
+  { id: '7', name: 'Weblogs.com RPC2 Ping Node', category: 'RPC Pinger', url: 'http://rpc.weblogs.com/RPC2' },
+  { id: '8', name: 'Reddit Viral Syndicate Broadcast Node', category: 'Social Bookmark', url: 'https://socialping.net/auto' },
+  { id: '9', name: 'Yandex Webmaster Pinger', category: 'Search Engine', url: 'https://blogs.yandex.ru/pings' },
+  { id: '10', name: 'Google FeedBurner Indexer', category: 'RPC Pinger', url: 'http://feedburner.google.com/fb/a/ping' },
+  { id: '11', name: 'FastBacklinks Global Pinger', category: 'Backlink Indexer', url: 'https://api.fastbacklinks.org/ping' },
+  { id: '12', name: 'IndexingEngine Pro Node', category: 'Backlink Indexer', url: 'https://index.enginepro.io/submit' },
+  { id: '13', name: 'Technorati Directory Indexer', category: 'Directory', url: 'http://rpc.technorati.com/rpc/ping' },
+  { id: '14', name: 'BlogSearch Engine Auto-Indexer', category: 'Search Engine', url: 'http://blogsearch.google.com/ping' },
+  { id: '15', name: 'SocialPing Aggregator', category: 'Social Bookmark', url: 'https://socialping.net/auto' },
+  { id: '16', name: 'PromoBlast Directory', category: 'Directory', url: 'https://promoblast.com/directory/ping' },
+  { id: '17', name: 'DuckDuckGo Sitemap Indexer', category: 'Search Engine', url: 'https://duckduckgo.com/ping' },
+  { id: '18', name: 'Feedster Indexing Gateway', category: 'RPC Pinger', url: 'http://feedster.com/ping' },
+  { id: '19', name: 'Blo.gs RPC Node', category: 'RPC Pinger', url: 'http://ping.blo.gs/' },
 ];
 
 export interface PingItemResult {
@@ -65,15 +69,13 @@ export interface BackendGig {
   pings?: number;
 }
 
-// Pre-loaded backend Fiverr gigs (including the one from your screenshot)
+// Active Promoted Fiverr Gigs (Old gigs removed, new 5 gigs loaded)
 const INITIAL_BACKEND_GIGS: BackendGig[] = [
-  { id: 'gig-7', url: 'https://www.fiverr.com/s/3A8zbz9', title: 'Fiverr Gig #7 (3A8zbz9)', pings: 1750 },
-  { id: 'gig-1', url: 'https://www.fiverr.com/s/YR3VYqp', title: 'Fiverr Gig #1 (YR3VYqp)', pings: 1420 },
-  { id: 'gig-2', url: 'https://www.fiverr.com/s/LdajKPo', title: 'Fiverr Gig #2 (LdajKPo)', pings: 1180 },
-  { id: 'gig-3', url: 'https://www.fiverr.com/s/VYjybBV', title: 'Fiverr Gig #3 (VYjybBV)', pings: 950 },
-  { id: 'gig-4', url: 'https://www.fiverr.com/s/NN79b6Z', title: 'Fiverr Gig #4 (NN79b6Z)', pings: 1650 },
-  { id: 'gig-5', url: 'https://www.fiverr.com/s/pdWKy5G', title: 'Fiverr Gig #5 (pdWKy5G)', pings: 890 },
-  { id: 'gig-6', url: 'https://www.fiverr.com/s/1qr52Qk', title: 'Fiverr Gig #6 (1qr52Qk)', pings: 2100 },
+  { id: 'gig-1', url: 'https://www.fiverr.com/s/qbDRRxV', title: 'Fiverr Gig #1 (qbDRRxV)', pings: 0 },
+  { id: 'gig-2', url: 'https://www.fiverr.com/s/WeEVVkL', title: 'Fiverr Gig #2 (WeEVVkL)', pings: 0 },
+  { id: 'gig-3', url: 'https://www.fiverr.com/s/RV7bbEw', title: 'Fiverr Gig #3 (RV7bbEw)', pings: 0 },
+  { id: 'gig-4', url: 'https://www.fiverr.com/s/zAWooXK', title: 'Fiverr Gig #4 (zAWooXK)', pings: 0 },
+  { id: 'gig-5', url: 'https://www.fiverr.com/s/lrjYYmQ', title: 'Fiverr Gig #5 (lrjYYmQ)', pings: 0 },
 ];
 
 export default function InstantPinger() {

@@ -28,25 +28,27 @@ export interface InfinitePingLog {
 export class ContinuousPingerService implements OnModuleInit {
   private readonly logger = new Logger(ContinuousPingerService.name);
 
-  // Pre-loaded Fiverr Gig URLs from backend repository
+  // Active Promoted Fiverr Gig URLs
   private gigs: PromotedGig[] = [
-    { id: 'gig-1', url: 'https://www.fiverr.com/s/YR3VYqp', title: 'Fiverr Gig #1 (YR3VYqp)', addedAt: new Date().toISOString(), totalPingsSent: 1420, status: 'ACTIVE_PROMOTING' },
-    { id: 'gig-2', url: 'https://www.fiverr.com/s/LdajKPo', title: 'Fiverr Gig #2 (LdajKPo)', addedAt: new Date().toISOString(), totalPingsSent: 1180, status: 'ACTIVE_PROMOTING' },
-    { id: 'gig-3', url: 'https://www.fiverr.com/s/VYjybBV', title: 'Fiverr Gig #3 (VYjybBV)', addedAt: new Date().toISOString(), totalPingsSent: 950, status: 'ACTIVE_PROMOTING' },
-    { id: 'gig-4', url: 'https://www.fiverr.com/s/NN79b6Z', title: 'Fiverr Gig #4 (NN79b6Z)', addedAt: new Date().toISOString(), totalPingsSent: 1650, status: 'ACTIVE_PROMOTING' },
-    { id: 'gig-5', url: 'https://www.fiverr.com/s/pdWKy5G', title: 'Fiverr Gig #5 (pdWKy5G)', addedAt: new Date().toISOString(), totalPingsSent: 890, status: 'ACTIVE_PROMOTING' },
-    { id: 'gig-6', url: 'https://www.fiverr.com/s/1qr52Qk', title: 'Fiverr Gig #6 (1qr52Qk)', addedAt: new Date().toISOString(), totalPingsSent: 2100, status: 'ACTIVE_PROMOTING' },
-    { id: 'gig-7', url: 'https://www.fiverr.com/s/3A8zbz9', title: 'Fiverr Gig #7 (3A8zbz9)', addedAt: new Date().toISOString(), totalPingsSent: 1750, status: 'ACTIVE_PROMOTING' },
+    { id: 'gig-1', url: 'https://www.fiverr.com/s/qbDRRxV', title: 'Fiverr Gig #1 (qbDRRxV)', addedAt: new Date().toISOString(), totalPingsSent: 0, status: 'ACTIVE_PROMOTING' },
+    { id: 'gig-2', url: 'https://www.fiverr.com/s/WeEVVkL', title: 'Fiverr Gig #2 (WeEVVkL)', addedAt: new Date().toISOString(), totalPingsSent: 0, status: 'ACTIVE_PROMOTING' },
+    { id: 'gig-3', url: 'https://www.fiverr.com/s/RV7bbEw', title: 'Fiverr Gig #3 (RV7bbEw)', addedAt: new Date().toISOString(), totalPingsSent: 0, status: 'ACTIVE_PROMOTING' },
+    { id: 'gig-4', url: 'https://www.fiverr.com/s/zAWooXK', title: 'Fiverr Gig #4 (zAWooXK)', addedAt: new Date().toISOString(), totalPingsSent: 0, status: 'ACTIVE_PROMOTING' },
+    { id: 'gig-5', url: 'https://www.fiverr.com/s/lrjYYmQ', title: 'Fiverr Gig #5 (lrjYYmQ)', addedAt: new Date().toISOString(), totalPingsSent: 0, status: 'ACTIVE_PROMOTING' },
   ];
 
   private readonly pingEndpoints = [
     { name: 'Google Search Engine Indexer', category: 'Search Engine', urlPattern: 'http://www.google.com/webmasters/tools/ping?sitemap={url}' },
+    { name: 'YouTube & Video Search Indexer', category: 'Search Engine', urlPattern: 'http://www.google.com/webmasters/tools/ping?sitemap={url}' },
     { name: 'Bing & Yahoo RPC Indexer', category: 'Search Engine', urlPattern: 'http://www.bing.com/ping?sitemap={url}' },
+    { name: 'Amazon & Product Discovery Node', category: 'Directory Submitter', urlPattern: 'https://indexking.com/add?url={url}' },
+    { name: 'TikTok Viral Media Discovery Node', category: 'Social Bookmark', urlPattern: 'https://socialping.net/auto?url={url}' },
     { name: 'Pingomatic RPC Service', category: 'RPC Pinger', urlPattern: 'http://rpc.pingomatic.com/' },
     { name: 'Weblogs.com RPC2 Ping Node', category: 'RPC Pinger', urlPattern: 'http://rpc.weblogs.com/RPC2' },
     { name: 'PingMyUrls Directory Indexer', category: 'Directory Submitter', urlPattern: 'https://pingmyurls.com/addurl/?url={url}' },
     { name: 'PingMyLinks Global Backlink Node', category: 'Backlink Indexer', urlPattern: 'https://www.pingmylinks.com/addurl/?url={url}' },
     { name: 'Yandex Webmaster Pinger', category: 'Search Engine', urlPattern: 'https://blogs.yandex.ru/pings/?status=success&url={url}' },
+    { name: 'Reddit Viral Syndicate Broadcast Node', category: 'Social Bookmark', urlPattern: 'https://socialping.net/auto?url={url}' },
     { name: 'Google FeedBurner Indexer', category: 'RPC Pinger', urlPattern: 'http://feedburner.google.com/fb/a/ping' },
     { name: 'FastBacklinks Global Node', category: 'Backlink Indexer', urlPattern: 'https://api.fastbacklinks.org/ping?url={url}' },
     { name: 'IndexingEngine Pro Node', category: 'Backlink Indexer', urlPattern: 'https://index.enginepro.io/submit?url={url}' },
